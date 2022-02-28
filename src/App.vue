@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <Header/>
+     <Header></Header>
+     <!-- 路由组件显示 -->
     <router-view></router-view>
-    <Footer/>
+    <!-- search 和 home 页面显示footer -->
+    <Footer v-show="$route.meta.isShow"></Footer>
   </div>
 </template>
 
@@ -16,5 +18,8 @@ export default {
     Header,
     Footer,
   },
+  methods: {
+   
+  }
 };
 </script>
