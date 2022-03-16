@@ -5,6 +5,7 @@
       <!-- 鼠标离开事件 委派给父级 -->
       <div @mouseleave="leaveEve">
         <h2 class="all">全部商品分类</h2>
+        <!-- 三级联动 -->
         <div class="sort">
           <div class="all-sort-list2">
             <div
@@ -16,7 +17,13 @@
               <h3 @mouseenter="changeIndex(index)">
                 <a href="">{{ c1.categoryName }}</a>
               </h3>
-              <div class="item-list clearfix">
+              <!-- 二级联动 -->
+              <div
+                class="item-list clearfix"
+                :style="{
+                  display: currentIndex == index ? 'block' : 'none',
+                }"
+              >
                 <div
                   class="subitem"
                   v-for="c2 in c1.childCategory"
@@ -26,6 +33,7 @@
                     <dt>
                       <a href="">{{ c2.categoryName }}</a>
                     </dt>
+                    <!-- 三级联动 -->
                     <dd>
                       <em v-for="c3 in c2.childCategory" :key="c3.categoryId">
                         <a href="">{{ c3.categoryName }}</a>
@@ -55,6 +63,8 @@
 
 <script>
 import { mapState } from "vuex";
+import throttle from "lodash/throttle";
+
 export default {
   name: "TypeNav",
   data() {
@@ -75,9 +85,12 @@ export default {
     }),
   },
   methods: {
-    changeIndex(index) {
+    // changeIndex(index) {
+    //   this.currentIndex = index;
+    // },
+    changeIndex: throttle(function (index) {
       this.currentIndex = index;
-    },
+    }, 50),
     leaveEve() {
       this.currentIndex = -1;
     },
@@ -194,12 +207,12 @@ export default {
               }
             }
           }
-
-          &:hover {
-            .item-list {
-              display: block;
-            }
-          }
+          // 改用js书写
+          // &:hover {
+          //   .item-list {
+          //     display: block;
+          //   }
+          // }
         }
         .addBgClr {
           background-color: skyblue;
