@@ -7,7 +7,7 @@
         <h2 class="all">全部商品分类</h2>
         <!-- 三级联动 -->
         <div class="sort">
-          <div class="all-sort-list2">
+          <div class="all-sort-list2" @click="goSearch()">
             <div
               class="item"
               v-for="(c1, index) in categoryList"
@@ -15,7 +15,11 @@
               :class="{ addBgClr: currentIndex == index }"
             >
               <h3 @mouseenter="changeIndex(index)">
-                <a href="">{{ c1.categoryName }}</a>
+                <a
+                  :data-categoryName="c1.categoryName"
+                  :data-category1Id="c1.categoryId"
+                  >{{ c1.categoryName }}</a
+                >
               </h3>
               <!-- 二级联动 -->
               <div
@@ -31,12 +35,20 @@
                 >
                   <dl class="fore">
                     <dt>
-                      <a href="">{{ c2.categoryName }}</a>
+                      <a
+                        :data-categoryName="c2.categoryName"
+                        :data-category2Id="c2.categoryId"
+                        >{{ c2.categoryName }}</a
+                      >
                     </dt>
                     <!-- 三级联动 -->
                     <dd>
                       <em v-for="c3 in c2.childCategory" :key="c3.categoryId">
-                        <a href="">{{ c3.categoryName }}</a>
+                        <a
+                          :data-categoryName="c3.categoryName"
+                          :data-category3Id="c3.categoryId"
+                          >{{ c3.categoryName }}</a
+                        >
                       </em>
                     </dd>
                   </dl>
@@ -93,6 +105,29 @@ export default {
     }, 50),
     leaveEve() {
       this.currentIndex = -1;
+    },
+    goSearch() {
+      // 为防止卡顿采取 编程式跳转 和 事件委派
+      // 1.使用 :data-categoryName="c3.categoryName" 标识a标签
+      let ele = event.target;
+      let { categoryname, category1id, category2id, category3id } = ele.dataset;
+      let location = {
+        name:"search",
+        query:{categoryName:categoryname}
+      };
+
+      if (categoryname) {
+        if(category1id) {
+          location.query.category1Id = category1id;
+        } else if (category2id) {
+          location.query.category2Id = category2id;
+        } else {
+          location.query.category3Id = category3id;
+        }
+
+      }
+      this.$router.push(location);
+      console.log(location)
     },
   },
 };
