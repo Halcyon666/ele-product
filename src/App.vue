@@ -18,8 +18,12 @@ export default {
     Header,
     Footer,
   },
+  mounted() {
+    // 获取三级联动菜单数据 并且只发送一次
+    this.$store.dispatch("categoryList");
+  },
   methods: {
    
-  }
+  },
 };
 </script>

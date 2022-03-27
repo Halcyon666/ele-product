@@ -90,7 +90,7 @@ export default {
   },
   // 挂载完毕后 拉取三级联动菜单数据
   mounted() {
-    this.$store.dispatch("categoryList");
+    // this.$store.dispatch("categoryList");
     if (this.$route.path != "/home") {
       this.isShow = false;
     }
@@ -135,7 +135,10 @@ export default {
           location.query.category3Id = category3id;
         }
       }
-      this.$router.push(location);
+      if (this.$route.params) {
+        location.params = this.$route.params;
+        this.$router.push(location);
+      }
     },
     // 搜索页面当鼠标进入的时候展示全部商品菜单
     showMenu() {
@@ -275,6 +278,16 @@ export default {
       height: 461px;
     }
     .sort-enter-active {
+      transition: all .5s linear;
+    }
+
+    .sort-leave {
+      height: 461px;
+    }
+    .sort-leave-to {
+      height: 0px;
+    }
+    .sort-leave-active {
       transition: all .5s linear;
     }
   }
