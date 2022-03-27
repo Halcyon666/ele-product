@@ -96,13 +96,13 @@
 
         // 面试题3 params参数可以传递也可以不传递，但是如果传递的是空串如何处理
         // 使用undefine: params参数可以传递或者不传递时，传递空字符串的问题
-        // this.$router.push({
-        //   name:"search",
-        //   params:{wd:'' || undefined},
-        //   query: {
-        //     k: this.wd.toUpperCase(),
-        //   }
-        // })
+        this.$router.push({
+          name:"search",
+          params:{wd:'' || undefined},
+          query: {
+            k: this.wd.toUpperCase(),
+          }
+        })
 
         // 报错处理 Uncaught (in promise) NavigationDuplicated
         // 声明式导航 没有这种问题 因为底层处理好了，而编程式导航有问题
@@ -117,15 +117,6 @@
         //     k:this.wd.toUpperCase(),
         //   }
         // },()=>{},(error)=>{});
-        this.$router.push({
-          name:"search",
-          params:{
-            wd: this.wd,
-          },
-          query:{
-            k:this.wd.toUpperCase(),
-          }
-        });
 
       }
     }

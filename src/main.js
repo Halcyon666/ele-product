@@ -8,7 +8,7 @@ import router from '@/router'
 // 引入Vuex
 import store from '@/store'
 
-Vue.config.productionTip = false
+// Vue.config.productionTip = false;
 import {reqCategoryList} from '@/api'
 reqCategoryList();
 

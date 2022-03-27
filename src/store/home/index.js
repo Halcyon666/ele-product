@@ -1,10 +1,10 @@
-import {reqCategoryList} from '@/api'
+import { reqCategoryList } from '@/api'
 
 const state = {
-    categoryList:[],
+    categoryList: [],
 };
 const mutations = {
-    CATEGORYLIST(state, categoryList){
+    CATEGORYLIST(state, categoryList) {
         state.categoryList = categoryList;
     },
 };
@@ -25,4 +25,3 @@ export default {
     actions,
     getters,
 };
- 

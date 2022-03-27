@@ -46,7 +46,7 @@ export default new VueRouter({
             // 方法2 对象写法
             // props: {a:1,b:2,wd:'aaa'}
             // 方法3 函数写法 可以param参数 query参数 通过props传递给路由组件
-            props: ($route) => ({ wd: $route.params.wd, k: $route.query.k })
+           props: ($route) => ({ wd: $route.params.wd, k: $route.query.k })
 
         },
         {

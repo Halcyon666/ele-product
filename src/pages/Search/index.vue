@@ -1,8 +1,6 @@
 <template>
 <div>
-  <div>Search Page</div>
-  <h1>{{$route.params.wd}}</h1>
-  <h1>{{$route.query.k}}</h1>
+  <TypeNav/>
 </div>
     
 </template>

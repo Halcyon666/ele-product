@@ -3,60 +3,63 @@
   <div class="type-nav">
     <div class="container">
       <!-- 鼠标离开事件 委派给父级 -->
-      <div @mouseleave="leaveEve">
+      <div @mouseleave="hideMenu" @mouseenter="showMenu">
         <h2 class="all">全部商品分类</h2>
-        <!-- 三级联动 -->
-        <div class="sort">
-          <div class="all-sort-list2" @click="goSearch()">
-            <div
-              class="item"
-              v-for="(c1, index) in categoryList"
-              :key="c1.categoryId"
-              :class="{ addBgClr: currentIndex == index }"
-            >
-              <h3 @mouseenter="changeIndex(index)">
-                <a
-                  :data-categoryName="c1.categoryName"
-                  :data-category1Id="c1.categoryId"
-                  >{{ c1.categoryName }}</a
-                >
-              </h3>
-              <!-- 二级联动 -->
+        <!-- 过渡动画 -->
+        <transition name='sort'>
+          <!-- 三级联动 -->
+          <div class="sort" v-show="isShow">
+            <div class="all-sort-list2" @click="goSearch">
               <div
-                class="item-list clearfix"
-                :style="{
-                  display: currentIndex == index ? 'block' : 'none',
-                }"
+                class="item"
+                v-for="(c1, index) in categoryList"
+                :key="c1.categoryId"
+                :class="{ addBgClr: currentIndex == index }"
               >
+                <h3 @mouseenter="changeIndex(index)">
+                  <a
+                    :data-categoryName="c1.categoryName"
+                    :data-category1Id="c1.categoryId"
+                    >{{ c1.categoryName }}</a
+                  >
+                </h3>
+                <!-- 二级联动 -->
                 <div
-                  class="subitem"
-                  v-for="c2 in c1.childCategory"
-                  :key="c2.categoryId"
+                  class="item-list clearfix"
+                  :style="{
+                    display: currentIndex == index ? 'block' : 'none',
+                  }"
                 >
-                  <dl class="fore">
-                    <dt>
-                      <a
-                        :data-categoryName="c2.categoryName"
-                        :data-category2Id="c2.categoryId"
-                        >{{ c2.categoryName }}</a
-                      >
-                    </dt>
-                    <!-- 三级联动 -->
-                    <dd>
-                      <em v-for="c3 in c2.childCategory" :key="c3.categoryId">
+                  <div
+                    class="subitem"
+                    v-for="c2 in c1.childCategory"
+                    :key="c2.categoryId"
+                  >
+                    <dl class="fore">
+                      <dt>
                         <a
-                          :data-categoryName="c3.categoryName"
-                          :data-category3Id="c3.categoryId"
-                          >{{ c3.categoryName }}</a
+                          :data-categoryName="c2.categoryName"
+                          :data-category2Id="c2.categoryId"
+                          >{{ c2.categoryName }}</a
                         >
-                      </em>
-                    </dd>
-                  </dl>
+                      </dt>
+                      <!-- 三级联动 -->
+                      <dd>
+                        <em v-for="c3 in c2.childCategory" :key="c3.categoryId">
+                          <a
+                            :data-categoryName="c3.categoryName"
+                            :data-category3Id="c3.categoryId"
+                            >{{ c3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
 
       <nav class="nav">
@@ -82,11 +85,15 @@ export default {
   data() {
     return {
       currentIndex: -1, // 指示鼠标所属的分类
+      isShow: true,
     };
   },
   // 挂载完毕后 拉取三级联动菜单数据
   mounted() {
     this.$store.dispatch("categoryList");
+    if (this.$route.path != "/home") {
+      this.isShow = false;
+    }
   },
   computed: {
     ...mapState({
@@ -103,31 +110,36 @@ export default {
     changeIndex: throttle(function (index) {
       this.currentIndex = index;
     }, 50),
-    leaveEve() {
-      this.currentIndex = -1;
+    hideMenu() {
+      this.currentIndex = -1; // 当前选中栏是否联动展示
+      if (this.$route.path != "/home") {
+        this.isShow = false; // 整个菜单是否显示,只在search页面生效，首页始终显示
+      }
     },
-    goSearch() {
+    goSearch(event) {
       // 为防止卡顿采取 编程式跳转 和 事件委派
       // 1.使用 :data-categoryName="c3.categoryName" 标识a标签
       let ele = event.target;
       let { categoryname, category1id, category2id, category3id } = ele.dataset;
       let location = {
-        name:"search",
-        query:{categoryName:categoryname}
+        name: "search",
+        query: { categoryName: categoryname },
       };
 
       if (categoryname) {
-        if(category1id) {
+        if (category1id) {
           location.query.category1Id = category1id;
         } else if (category2id) {
           location.query.category2Id = category2id;
         } else {
           location.query.category3Id = category3id;
         }
-
       }
       this.$router.push(location);
-      console.log(location)
+    },
+    // 搜索页面当鼠标进入的时候展示全部商品菜单
+    showMenu() {
+      this.isShow = true;
     },
   },
 };
@@ -253,6 +265,17 @@ export default {
           background-color: skyblue;
         }
       }
+    }
+    // 导航栏菜单展示进入开始状态
+    .sort-enter {
+      height: 0px;
+    }
+    // 导航栏菜单展示进入结束状态
+    .sort-enter-to {
+      height: 461px;
+    }
+    .sort-enter-active {
+      transition: all .5s linear;
     }
   }
 }
