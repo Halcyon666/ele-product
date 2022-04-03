@@ -5,6 +5,8 @@ import TypeNav from '@/components/TypeNav'
 import router from '@/router'
 // 引入Vuex
 import store from '@/store'
+// 导入Mock 模拟数据
+import '@/mock/MockServer'
 
 Vue.config.productionTip = false;
 // 注册三级联动全局组件
