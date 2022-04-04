@@ -16,7 +16,12 @@ const actions = {
         commit("GETSEARCHLIST", list.data)
     }
 };
-const getters = {};
+const getters = {
+    // 简化获取到的数据层级  简化书写
+    goodList() {
+        return state.searchList.goodList || [];
+    }
+};
 
 
 export default {

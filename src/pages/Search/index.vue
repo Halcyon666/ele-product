@@ -17,7 +17,7 @@
             <li class="with-x">OPPO<i>×</i></li>
           </ul>
         </div>
-
+        <div @click="getPayPicture">点我</div>
         <!--selector-->
         <SearchSelector />
 
@@ -328,6 +328,9 @@
 
 <script>
   import SearchSelector from './SearchSelector/SearchSelector'
+  import {mapGetters} from 'vuex'
+  import QRcode from 'qrcode'
+
   export default {
     name: 'Search',
 
@@ -336,7 +339,18 @@
     },
     mounted() {
       this.$store.dispatch('getSearchList',{});
+    },
+    computed: {
+      // getters部分模块 不像state 有 home search 之分
+      ...mapGetters(['goodList']),
+    },
+    methods: {
+      async getPayPicture() {
+        let result = await QRcode.toDataURL("weixin://wxpay/bizpayurl?pr=X1Ozxasd");
+        console.log(result);
+      }
     }
+    
   }
 </script>
 
