@@ -6,8 +6,12 @@
         <!--banner轮播-->
         <div class="swiper-container" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div
+              class="swiper-slide"
+              v-for="carousel in bannerList"
+              :key="carousel.id"
+            >
+              <img :src="carousel.imgUrl" />
             </div>
           </div>
           <!-- 如果需要分页器 -->
@@ -93,6 +97,8 @@
 
 <script>
 import { mapState } from "vuex";
+import Swiper from "swiper";
+
 export default {
   name: "ListContainer",
   mounted() {
@@ -102,6 +108,31 @@ export default {
     ...mapState({
       bannerList: (state) => state.home.bannerList,
     }),
+  },
+  // watch + this.$nextTick 保证数据返回之后，
+  // 在下次DOM更新循环结束(v-for)之后执行延迟回调。
+  watch: {
+    bannerList: {
+      handler(nVal, oVal) {
+        this.$nextTick(() => {
+          var mySwiper = new Swiper("#mySwiper", {
+            loop: true, // 循环模式选项
+
+            // 如果需要分页器
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+            },
+
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+          });
+        });
+      },
+    },
   },
 };
 </script>

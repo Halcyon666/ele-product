@@ -21,8 +21,8 @@ const actions = {
     },
     async getBannerList({commit}) {
         let bannerList = await reqGetBannerList();
-        if (bannerList)
-            commit("GETBANNERLIST",bannerList);
+        if (bannerList.code === 200)
+            commit("GETBANNERLIST",bannerList.data);
     }
 
 };
