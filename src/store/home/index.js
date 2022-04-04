@@ -16,8 +16,8 @@ const actions = {
     // 请求服务器 获取数据
     async categoryList({commit}) {
        let categoryList = await reqCategoryList();
-       if (categoryList) 
-            commit("CATEGORYLIST", categoryList);
+       if (categoryList.code === 200) 
+            commit("CATEGORYLIST", categoryList.data);
     },
     async getBannerList({commit}) {
         let bannerList = await reqGetBannerList();
